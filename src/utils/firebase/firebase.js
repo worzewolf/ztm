@@ -65,17 +65,8 @@ export const getCategoriesAndDocuments = async () => {
     const q = query(collectionRef)
 
     const querySnapShot = await getDocs(q)
-    const categoryMap = querySnapShot.docs.reduce((acc, docSnapShot) => {
-        const {
-            title,
-            items
-        } = docSnapShot.data()
 
-        acc[title.toLocaleLowerCase()] = items
-        return acc
-    }, {})
-
-    return categoryMap
+    return querySnapShot.docs.map(docSnapShot => docSnapShot.data())
 }
 
 export const createUserDocumentFromAuth = async (userAuth, additionalInformation = {}) => {
@@ -83,9 +74,9 @@ export const createUserDocumentFromAuth = async (userAuth, additionalInformation
 
     const userDocRef = doc(db, 'users', userAuth.uid)
 
-    const userSnapshop = await getDoc(userDocRef)
+    const userSnapShop = await getDoc(userDocRef)
 
-    if (!userSnapshop.exists()) {
+    if (!userSnapShop.exists()) {
         const {displayName, email} = userAuth;
         const createdAt = new Date()
 
@@ -118,7 +109,4 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
 export const signOutUser = async () => await signOut(auth)
 
-export const onAuthStateChangedListener = (callback) => onAuthStateChanged(
-    auth, callback
-    // , errorCallback, completeCallback
-)
+export const onAuthStateChangedListener = (callback) => onAuthStateChanged(auth, callback)

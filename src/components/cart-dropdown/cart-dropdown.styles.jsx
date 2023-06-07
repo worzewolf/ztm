@@ -36,4 +36,3 @@ export const CartItems = styled.div`
   flex-direction: column;
   overflow: auto;
 `
-
